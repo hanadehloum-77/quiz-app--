@@ -1,0 +1,110 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How Well Do You Know Me?</title>
+<style>
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Georgia, serif;
+  color: #fff8ef;
+  background:
+    linear-gradient(#1b1019bb, #1b1019dd),
+    url("background.jpg") center/cover fixed,
+    #291721;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+.card {
+  width: 100%;
+  max-width: 480px;
+  padding: 30px 22px;
+  text-align: center;
+  background: #2d1924eF;
+  border: 1px solid #d8b56d;
+  border-radius: 18px;
+  box-shadow: 0 0 30px #0008;
+}
+h1 { color: #e8c783; }
+button {
+  width: 100%;
+  margin: 8px 0;
+  padding: 13px;
+  border: 1px solid #d8b56d;
+  border-radius: 10px;
+  background: #f8edda;
+  color: #321b28;
+  font-size: 16px;
+  cursor: pointer;
+}
+button:hover { background: #e8c783; }
+#progress { color: #e8c783; }
+</style>
+</head>
+<body>
+<main class="card">
+  <h1>♡ How Well Do You Know Me? ♡</h1>
+  <p>Let's discover how well you know me...</p>
+  <div id="game">
+    <p id="progress">Question 1</p>
+    <h2 id="question"></h2>
+    <div id="answers"></div>
+  </div>
+  <h2 id="result" hidden></h2>
+  <button id="start">Begin the Quiz ♡</button>
+</main>
+<script>
+const questions = [
+  { q: "What is my favorite color?", a: ["White", "Black", "Purple", "Green"], correct: 0 },
+  { q: "What is my favorite number?", a: ["1", "4", "7", "9"], correct: 2 },
+  { q: "When is my birthday?", a: ["28 July", "28 June", "7 August", "18 July"], correct: 0 }
+];
+let index = 0, score = 0;
+
+const game = document.getElementById("game");
+const start = document.getElementById("start");
+const result = document.getElementById("result");
+
+function showQuestion() {
+  if (index >= questions.length) {
+    game.hidden = true;
+    result.hidden = false;
+    result.textContent = `You scored ${score} / ${questions.length} ♡`;
+    start.textContent = "Play Again";
+    start.hidden = false;
+    return;
+  }
+  const item = questions[index];
+  document.getElementById("progress").textContent =
+    `Question ${index + 1} of ${questions.length}`;
+  document.getElementById("question").textContent = item.q;
+  const answers = document.getElementById("answers");
+  answers.replaceChildren();
+  item.a.forEach((answer, i) => {
+    const button = document.createElement("button");
+    button.textContent = answer;
+    button.onclick = () => {
+      if (i === item.correct) score++;
+      index++;
+      showQuestion();
+    };
+    answers.appendChild(button);
+  });
+}
+start.onclick = () => {
+  index = 0;
+  score = 0;
+  result.hidden = true;
+  game.hidden = false;
+  start.hidden = true;
+  showQuestion();
+};
+game.hidden = true;
+</script>
+</body>
+</html>
